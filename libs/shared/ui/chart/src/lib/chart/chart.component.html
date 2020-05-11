@@ -1,5 +1,5 @@
 <google-chart
-  *ngIf="data"
+  *ngIf="chartData && !error"
   [title]="chart.title"
   [type]="chart.type"
   [data]="chartData"
@@ -7,3 +7,7 @@
   [options]="chart.options"
 >
 </google-chart>
+
+<div *ngIf="error" role="alert" aria-label="error from API">
+  Error in fetching the data
+</div>
