@@ -21,7 +21,7 @@ export class PriceQueryEffects {
   @Effect() loadPriceQuery$ = this.dataPersistence.fetch(
     PriceQueryActionTypes.FetchPriceQuery,
     {
-      run: (action: FetchPriceQuery, state: PriceQueryPartialState) => {
+      run: (action: FetchPriceQuery) => {
         return this.httpClient
           .get(
             `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
@@ -33,7 +33,7 @@ export class PriceQueryEffects {
           );
       },
 
-      onError: (action: FetchPriceQuery, error) => {
+      onError: (error) => {
         return new PriceQueryFetchError(error);
       }
     }
