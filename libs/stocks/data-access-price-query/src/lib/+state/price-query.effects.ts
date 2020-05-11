@@ -33,7 +33,8 @@ export class PriceQueryEffects {
           );
       },
 
-      onError: (error) => {
+      onError: (action: FetchPriceQuery, error) => {
+        console.log(action)
         return new PriceQueryFetchError(error);
       }
     }
