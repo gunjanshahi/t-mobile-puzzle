@@ -14,7 +14,7 @@ export class StocksComponent implements OnInit, OnDestroy {
   symbol: string;
   period: string;
 
-  quotes$ = this.priceQuery.priceQueries$;
+  quotes$ = this.priceQuery.getFilteredPriceQuery$;
   error$ = this.priceQuery.priceQueryerror$;
 
   timePeriods = [
@@ -29,12 +29,20 @@ export class StocksComponent implements OnInit, OnDestroy {
   ];
 
   private unsubscribe: Subject<void> = new Subject<void>();
+  maxFromDate: Date;
+  maxToDate: Date;
+  minToDate: Date;
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
+    this.maxFromDate = new Date();
+    this.maxToDate = new Date();
     this.stockPickerForm = this.fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      toDate: [null, Validators.required],
+      fromDate : [null, Validators.required]
     });
+
+    
   }
 
   ngOnInit() {
@@ -43,10 +51,28 @@ export class StocksComponent implements OnInit, OnDestroy {
 
   fetchQuote() {
     if (this.stockPickerForm.valid) {
-      const { symbol, period } = this.stockPickerForm.value;
-      this.priceQuery.fetchQuote(symbol, period);
+      const { symbol, toDate,  fromDate } = this.stockPickerForm.value;
+      this.priceQuery.fetchQuote(symbol, fromDate.getTime(), toDate.getTime());
     }
   }
+
+  onChangeToDate(event) {
+    this.maxFromDate = event.target.value;
+  }
+
+  onChangeFromDate(event) {
+    this.minToDate = event.target.value;
+  }
+
+  /**
+   * Invalid Input validation.
+   * @param controlName : Form control name
+  */
+ checkInvalidInput(controlName: string): boolean {
+  return this.stockPickerForm.get(controlName).invalid
+    && this.stockPickerForm.get(controlName).dirty;
+  }
+
 
   ngOnDestroy(): void {
     this.unsubscribe.next();

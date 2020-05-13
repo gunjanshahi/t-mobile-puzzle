@@ -38,13 +38,16 @@ export class ChartComponent implements OnInit, OnDestroy {
     };
 
     this.data$.pipe(takeUntil(this.unsubscribe)).subscribe(newData => {
-      this.chartData = newData;
-      this.error = false;
+      if (newData && newData.length) {
+        this.chartData = newData;
+        this.error = false;
+      } 
     });
 
     this.error$.pipe(takeUntil(this.unsubscribe)).subscribe(error => {
       this.error = error
     });
+
   }
 
   ngOnDestroy() {

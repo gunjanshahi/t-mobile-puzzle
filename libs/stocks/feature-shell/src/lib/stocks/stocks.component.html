@@ -18,7 +18,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-label>Favorite time period</mat-label>
     <mat-select formControlName="period" role="listbox" id="period">
       <mat-option role="option"
@@ -28,6 +28,25 @@
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
+  </mat-form-field> -->
+
+  <mat-form-field>
+    <mat-label>Choose from date</mat-label>
+    <input matInput (dateChange)="onChangeFromDate($event)" [matDatepicker]="fromDatepicker"
+    [max]="maxFromDate" formControlName="fromDate" aria-label="date picker for from">
+    <mat-datepicker-toggle matSuffix [for]="fromDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #fromDatepicker></mat-datepicker>
+    <mat-error *ngIf="checkInvalidInput('fromDate')">From date is invalid</mat-error>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Choose to date</mat-label>
+    <input matInput (dateChange)="onChangeToDate($event)" 
+    [matDatepicker]="toDatepicker" [max]="maxToDate" [min]="minToDate" formControlName="toDate" aria-label="date picker for to">
+    <mat-datepicker-toggle matSuffix [for]="toDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #toDatepicker></mat-datepicker>
+    <mat-error *ngIf="checkInvalidInput('toDate')">To date is invalid</mat-error>
   </mat-form-field>
 
   <!-- <button (click)="fetchQuote()" mat-raised-button aria-label="Fetch the stocks data">Go</button> -->

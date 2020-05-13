@@ -4,9 +4,13 @@ import { PriceQuery } from './price-query.type';
 import { transformPriceQueryResponse } from './price-query-transformer.util';
 
 export const PRICEQUERY_FEATURE_KEY = 'priceQuery';
-
+export interface DateRange {
+  fromDate: number;
+  toDate: number;
+}
 export interface PriceQueryState extends EntityState<PriceQuery> {
   selectedSymbol: string;
+  dateRange: DateRange
   error?: any
 }
 
@@ -27,7 +31,8 @@ export interface PriceQueryPartialState {
 
 export const initialState: PriceQueryState = priceQueryAdapter.getInitialState({
   selectedSymbol: '',
-  error: null
+  error: null,
+  dateRange: null
 });
 
 export function priceQueryReducer(
@@ -51,6 +56,12 @@ export function priceQueryReducer(
       return {
         ...state,
         selectedSymbol: action.symbol
+      };
+    }
+    case PriceQueryActionTypes.SelectDateRange: {
+      return {
+        ...state,
+        dateRange: { fromDate: action.fromDate, toDate: action.toDate }
       };
     }
   }

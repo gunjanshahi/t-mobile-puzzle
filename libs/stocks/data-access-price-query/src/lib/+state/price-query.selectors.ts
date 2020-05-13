@@ -25,3 +25,14 @@ export const getAllPriceQueries = createSelector(
   getPriceQueryState,
   selectAll
 );
+
+export const getSelectedDateRange = createSelector(
+  getPriceQueryState,
+  (state: PriceQueryState) => state.dateRange
+);
+
+export const getFilteredPriceQueries = createSelector(
+  getAllPriceQueries,
+  getSelectedDateRange,
+  (prices, dateRange) => prices.filter(price => price.dateNumeric >= dateRange.fromDate && price.dateNumeric <= dateRange.toDate)
+);
