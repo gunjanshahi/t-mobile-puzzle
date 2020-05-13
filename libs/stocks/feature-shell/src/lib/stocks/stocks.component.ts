@@ -46,7 +46,6 @@ export class StocksComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.stockPickerForm.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(this.fetchQuote.bind(this));
   }
 
   fetchQuote() {
