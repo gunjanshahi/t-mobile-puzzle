@@ -1,5 +1,4 @@
 const Wreck = require('@hapi/wreck');
-const CatboxRedis = require('@hapi/catbox-redis');
 
 const getPriceQueryResponse = async function (params) {
     const [symbol, period, queryParam] = params.split(':');
