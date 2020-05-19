@@ -32,7 +32,7 @@
 
   <mat-form-field>
     <mat-label>Choose from date</mat-label>
-    <input matInput (dateChange)="onChangeFromDate($event)" [matDatepicker]="fromDatepicker"
+    <input matInput [matDatepicker]="fromDatepicker"
     [max]="maxFromDate" formControlName="fromDate" aria-label="date picker for from">
     <mat-datepicker-toggle matSuffix [for]="fromDatepicker"></mat-datepicker-toggle>
     <mat-datepicker #fromDatepicker></mat-datepicker>
@@ -42,7 +42,7 @@
 
   <mat-form-field>
     <mat-label>Choose to date</mat-label>
-    <input matInput (dateChange)="onChangeToDate($event)" 
+    <input matInput
     [matDatepicker]="toDatepicker" [max]="maxToDate" [min]="minToDate" formControlName="toDate" aria-label="date picker for to">
     <mat-datepicker-toggle matSuffix [for]="toDatepicker"></mat-datepicker-toggle>
     <mat-datepicker #toDatepicker></mat-datepicker>

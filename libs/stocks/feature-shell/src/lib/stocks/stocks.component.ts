@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
   selector: 'coding-challenge-stocks',
@@ -33,19 +33,25 @@ export class StocksComponent implements OnInit, OnDestroy {
   maxToDate: Date;
   minToDate: Date;
 
-  constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
-    this.maxFromDate = new Date();
-    this.maxToDate = new Date();
+  constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) { 
+  }
+
+  ngOnInit() {
     this.stockPickerForm = this.fb.group({
       symbol: [null, Validators.required],
       toDate: [null, Validators.required],
       fromDate : [null, Validators.required]
     });
 
-    
-  }
+    this.maxFromDate = new Date();
+    this.maxToDate = new Date();
 
-  ngOnInit() {
+    this.stockPickerForm.get('toDate').valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(val => {
+      this.maxFromDate = val ? val : this.maxFromDate;
+    });
+    this.stockPickerForm.get('fromDate').valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(val => {
+      this.minToDate = val;
+    });
   }
 
   fetchQuote() {
@@ -53,14 +59,6 @@ export class StocksComponent implements OnInit, OnDestroy {
       const { symbol, toDate,  fromDate } = this.stockPickerForm.value;
       this.priceQuery.fetchQuote(symbol, fromDate.getTime(), toDate.getTime());
     }
-  }
-
-  onChangeToDate(event) {
-    this.maxFromDate = event.target.value;
-  }
-
-  onChangeFromDate(event) {
-    this.minToDate = event.target.value;
   }
 
   /**
