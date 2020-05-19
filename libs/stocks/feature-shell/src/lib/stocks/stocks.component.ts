@@ -31,13 +31,14 @@ export class StocksComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
-    this.stockPickerForm = fb.group({
-      symbol: [null, Validators.required],
-      period: [null, Validators.required]
-    });
   }
 
   ngOnInit() {
+    this.stockPickerForm = this.fb.group({
+      symbol: [null, Validators.required],
+      period: [null, Validators.required]
+    });
+
     this.stockPickerForm.valueChanges.pipe(debounceTime(this.DEBOUNCE_TIME),
     takeUntil(this.unsubscribe)).subscribe(this.fetchQuote.bind(this));
   }
