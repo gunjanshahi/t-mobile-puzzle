@@ -5,6 +5,7 @@
       placeholder="Symbol e.g AAPL"
       formControlName="symbol"
       value=""
+      id="symbol"
     />
     <mat-error
       ><span
@@ -17,19 +18,38 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period">
-      <mat-option
+    <mat-select formControlName="period" role="listbox" id="period">
+      <mat-option role="option"
         *ngFor="let timePeriod of timePeriods"
         [value]="timePeriod.value"
       >
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
+  </mat-form-field> -->
+
+  <mat-form-field>
+    <mat-label>Choose from date</mat-label>
+    <input matInput [matDatepicker]="fromDatepicker"
+    [max]="maxFromDate" formControlName="fromDate" aria-label="date picker for from">
+    <mat-datepicker-toggle matSuffix [for]="fromDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #fromDatepicker></mat-datepicker>
+    <mat-error *ngIf="checkInvalidInput('fromDate')">From date is invalid</mat-error>
   </mat-form-field>
 
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
+
+  <mat-form-field>
+    <mat-label>Choose to date</mat-label>
+    <input matInput
+    [matDatepicker]="toDatepicker" [max]="maxToDate" [min]="minToDate" formControlName="toDate" aria-label="date picker for to">
+    <mat-datepicker-toggle matSuffix [for]="toDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #toDatepicker></mat-datepicker>
+    <mat-error *ngIf="checkInvalidInput('toDate')">To date is invalid</mat-error>
+  </mat-form-field>
+
+  <button (click)="fetchQuote()" mat-raised-button aria-label="Fetch the stocks data">Go</button>
 </form>
 
-<coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
+<coding-challenge-chart [data$]="quotes$" [error$]="error$"></coding-challenge-chart>
